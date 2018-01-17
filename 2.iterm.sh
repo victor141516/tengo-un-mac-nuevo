@@ -27,7 +27,7 @@ defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
 
 echo "------------------------------"
 echo "Downloading previous config to ~/Library/Preferences"
-curl -L https://gist.githubusercontent.com/ZiFFeL1992/d058534081ee0e8741dff5fd644389ee/raw/14caaafe5be5f5fc2f060640a8e65b482e42825f/com.googlecode.iterm2.plist > ~/Library/Preferences/com.googlecode.iterm2.plist
+curl -L https://raw.githubusercontent.com/victor141516/tengo-un-mac-nuevo/master/com.googlecode.iterm2.plist > ~/Library/Preferences/com.googlecode.iterm2.plist
 
 # Change default shell to zsh
 sudo dscl . -create /Users/$USER UserShell /usr/local/bin/zsh

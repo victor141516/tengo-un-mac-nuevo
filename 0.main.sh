@@ -101,6 +101,7 @@ brew cask install --appdir="/Applications" telegram-desktop
 brew cask install --appdir="/Applications" transmission
 brew cask install --appdir="/Applications" spectacle
 brew cask install --appdir="/Applications" sequel-pro
+brew cask install --appdir="/Applications" tableplus
 brew cask install --appdir="/Applications" vlc
 brew cask install --appdir="/Applications" sip
 brew cask install --appdir="/Applications" slack

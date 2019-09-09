@@ -26,11 +26,13 @@ export PATH="/opt/things:$PATH"
 export PATH=$PATH:$GOPATH/bin
 
 # Python
+source /usr/local/bin/virtualenvwrapper.sh
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
 export PYTHONDONTWRITEBYTECODE=1
-export PATH="/usr/local/opt/python/libexec/bin:$PATH"
+export PATH="$HOME/.pyenv/bin:/usr/local/opt/python/libexec/bin:$PATH"
 export VIRTUALENVWRAPPER_PYTHON=/usr/local/opt/python/libexec/bin/python
 export WORKON_HOME=$HOME/.venvs
-source /usr/local/bin/virtualenvwrapper.sh
 alias venv3='workon . || mkvirtualenv -p $(which python3.7) ${PWD##*/}'
 alias venv2='workon . || mkvirtualenv -p $(which python2.7) ${PWD##*/}'
 alias venv=venv3

@@ -61,6 +61,7 @@ echo "Installing OSXFuse..." && brew cask install osxfuse > /dev/null
 echo "Installing Pyenv..." && brew install pyenv > /dev/null
 echo "Installing Python 2..." && brew install python > /dev/null
 echo "Installing Python 3..." && brew install python3 > /dev/null
+echo "Installing pyenv-virtualenv..." && brew install pyenv-virtualenv > /dev/null
 echo "Installing RAR..." && brew install rar > /dev/null
 echo "Installing reattach-to-user-namespace..." && brew install reattach-to-user-namespace > /dev/null
 echo "Installing rg..." && brew install rg > /dev/null

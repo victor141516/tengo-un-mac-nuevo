@@ -39,6 +39,7 @@ alias venv=venv3
 
 . /usr/local/etc/profile.d/z.sh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
 
 export EDITOR=nano
 alias p=popd

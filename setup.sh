@@ -38,7 +38,7 @@ export EXTRA_INSTALL=$(LC_ALL=en_US.UTF-8 \
   'echo "Installing OSXFuse..." && brew cask install osxfuse > /dev/null' 'OSXFuse' on \
   'echo "Installing Pyenv..." && brew install pyenv > /dev/null' 'Pyenv' on \
   'echo "Installing pyenv-virtualenv..." && brew install pyenv-virtualenv > /dev/null' 'pyenv-virtualenv' on \
-  'echo "Installing screen..." && brew install homebrew/dupes/screen > /dev/null' 'screen' on \
+  'echo "Installing screen..." && brew install screen > /dev/null' 'screen' on \
   'echo "Installing sfnt2woff-zopfli..." && brew install sfnt2woff-zopfli > /dev/null' 'sfnt2woff-zopfli' on \
   'echo "Installing sfnt2woff..." && brew install sfnt2woff > /dev/null' 'sfnt2woff' on \
   'echo "Installing Sip..." && brew cask install --appdir="/Applications" sip > /dev/null' 'Sip' on \
@@ -74,7 +74,7 @@ echo "Installing fzf..." && brew install fzf > /dev/null
 echo "Installing git..." && brew install git > /dev/null
 echo "Installing gnu-sed..." && brew install gnu-sed --with-default-names > /dev/null
 echo "Installing Google Chrome..." && brew cask install --appdir="/Applications" google-chrome > /dev/null
-echo "Installing grep..." && brew install homebrew/dupes/grep > /dev/null
+echo "Installing grep..." && brew install grep > /dev/null
 echo "Installing htop..." && brew install htop > /dev/null
 echo "Installing httpie..." && brew install httpie > /dev/null
 echo "Installing iTerm2..." && brew cask install --appdir="/Applications" iterm2 > /dev/null
@@ -83,7 +83,7 @@ echo "Installing lsd..." && brew install lsd > /dev/null
 echo "Installing mosh..." && brew install mosh > /dev/null
 echo "Installing ncdu..." && brew install ncdu > /dev/null
 echo "Installing node..." && brew install node > /dev/null
-echo "Installing openssh..." && brew install homebrew/dupes/openssh > /dev/null
+echo "Installing openssh..." && brew install openssh > /dev/null
 echo "Installing OpenSSL..." && brew install openssl > /dev/null
 echo "Installing Python 2..." && brew install python2 > /dev/null
 echo "Installing Python 3..." && brew install python3 > /dev/null

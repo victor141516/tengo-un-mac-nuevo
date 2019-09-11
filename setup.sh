@@ -101,7 +101,8 @@ echo "Installing Visual Studio Code..." && brew cask install --appdir="/Applicat
 echo "Installing VLC..." && brew cask install --appdir="/Applications" vlc > /dev/null
 echo "Installing wget..." && brew install wget --with-iri > /dev/null
 echo "Installing woff2..." && brew install woff2 > /dev/null
-echo "Installing Z..." && brew install z > /dev/null
+echo "Installing Z..." && curl -fsSL "https://raw.githubusercontent.com/rupa/z/master/z.sh" > ~/.z.sh
+echo "Installing fz..." && curl "https://raw.githubusercontent.com/changyuheng/fz/master/fz.sh" > ~/.fz.sh
 echo "Installing ZSH..." && brew install zsh > /dev/null
 echo "Installing git-open" && npm install --global git-open > /dev/null
 

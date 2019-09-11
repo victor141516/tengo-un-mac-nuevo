@@ -37,8 +37,9 @@ alias venv3='workon . || mkvirtualenv -p $(which python3.7) ${PWD##*/}'
 alias venv2='workon . || mkvirtualenv -p $(which python2.7) ${PWD##*/}'
 alias venv=venv3
 
-. /usr/local/etc/profile.d/z.sh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f ~/.z.sh ] && source ~/.z.sh
+[ -f ~/.fz.sh ] && source ~/.fz.sh
 PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
 
 export EDITOR=nano

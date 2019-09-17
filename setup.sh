@@ -136,6 +136,6 @@ echo "Setting up iTerm2..." \
   && defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "~/Library/Preferences" \
   && defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
 
-echo "Installing oh-my-zsh..." && curl -fsSL -o /tmp/install.sh https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh && sh /tmp/install.sh --unattended
+echo "Installing oh-my-zsh..." && curl -fsSL -o /tmp/install.sh https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh && sh /tmp/install.sh --unattended && rm /tmp/install.sh
 echo "Setting up ZSH" && cp .zshrc ~/.zshrc
 echo "Setting up tmux" && cp .tmux.conf ~/.tmux.conf

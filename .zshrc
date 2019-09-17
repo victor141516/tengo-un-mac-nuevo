@@ -30,6 +30,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 export PYTHONDONTWRITEBYTECODE=1
+export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$HOME/.pyenv/bin:/usr/local/opt/python/libexec/bin:$PATH"
 export VIRTUALENVWRAPPER_PYTHON=/usr/local/opt/python/libexec/bin/python
 export WORKON_HOME=$HOME/.venvs

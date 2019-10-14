@@ -139,3 +139,6 @@ echo "Setting up iTerm2..." \
 echo "Installing oh-my-zsh..." && curl -fsSL -o /tmp/install.sh https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh && sh /tmp/install.sh --unattended && rm /tmp/install.sh
 echo "Setting up ZSH" && cp .zshrc ~/.zshrc
 echo "Setting up tmux" && cp .tmux.conf ~/.tmux.conf
+
+defaults write -g InitialKeyRepeat -int 10 # normal minimum is 15 (225 ms)
+defaults write -g KeyRepeat -int 1 # normal minimum is 2 (30 ms)

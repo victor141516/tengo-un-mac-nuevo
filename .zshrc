@@ -49,6 +49,7 @@ alias cat=bat
 alias gro=git-open
 alias gg=ggpush
 alias ggg='ggpush --force'
+alias gp=git pull
 alias gcdtn='git commit --amend --no-edit --date "$(date)"'
 alias glog='git log --oneline --decorate --graph --all --full-history'
 alias ls='lsd'

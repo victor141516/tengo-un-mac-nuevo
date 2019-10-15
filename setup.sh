@@ -72,6 +72,7 @@ echo "Installing font-roboto-mono..." && brew cask install font-roboto-mono > /d
 echo "Installing Fork..." && brew cask install --appdir="/Applications" fork > /dev/null
 echo "Installing fzf..." && brew install fzf > /dev/null
 echo "Installing git..." && brew install git > /dev/null
+echo "Installing gci..." && npm install -g victor141516/git-checkout-interactive > /dev/null
 echo "Installing gnu-sed..." && brew install gnu-sed --with-default-names > /dev/null
 echo "Installing Google Chrome..." && brew cask install --appdir="/Applications" google-chrome > /dev/null
 echo "Installing grep..." && brew install grep > /dev/null
@@ -124,6 +125,10 @@ fi;
 touch ~/.hushlogin # Hides last login
 defaults write -g InitialKeyRepeat -int 15 # normal minimum is 15 (225 ms)
 defaults write -g KeyRepeat -int 2 # normal minimum is 2 (30 ms)
+
+echo "Installing node lts" && \
+  npm install -g n && \
+  sudo n install lts
 
 echo "Installing Python 2 virtualenv..." \
   && pip2 install virtualenv virtualenvwrapper > /dev/null

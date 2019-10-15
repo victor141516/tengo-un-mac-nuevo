@@ -72,7 +72,7 @@ echo "Installing font-roboto-mono..." && brew cask install font-roboto-mono > /d
 echo "Installing Fork..." && brew cask install --appdir="/Applications" fork > /dev/null
 echo "Installing fzf..." && brew install fzf > /dev/null
 echo "Installing git..." && brew install git > /dev/null
-echo "Installing gci..." && npm install -g victor141516/git-checkout-interactive > /dev/null
+echo "Installing gci..." && npm install -g 'victor141516/git-checkout-interactive#patch-1' > /dev/null
 echo "Installing gnu-sed..." && brew install gnu-sed --with-default-names > /dev/null
 echo "Installing Google Chrome..." && brew cask install --appdir="/Applications" google-chrome > /dev/null
 echo "Installing grep..." && brew install grep > /dev/null

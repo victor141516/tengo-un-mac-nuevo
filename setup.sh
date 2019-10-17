@@ -31,6 +31,7 @@ export EXTRA_INSTALL=$(LC_ALL=en_US.UTF-8 \
   'echo "Installing Firebase..." && brew install firebase-cli > /dev/null' 'Firebase' on \
   'echo "Installing Firefox..." && brew cask install --appdir="/Applications" firefox > /dev/null' 'Firefox' on \
   'echo "Installing Golang..." && brew install go > /dev/null' 'Golang' on \
+  'echo "Installing Google Cloud SDK..." && brew cask install google-cloud-sdk > /dev/null' 'Google Cloud SDK' on \
   'echo "Installing Google Chrome Canary..." && brew cask install --appdir="/Applications" google-chrome-canary > /dev/null' 'Google Chrome Canary' on \
   'echo "Installing Google Drive File Stream..." && brew cask install --appdir="/Applications" google-drive-file-stream > /dev/null' 'Google Drive File Stream' on \
   'echo "Installing IINA..." && brew cask install --appdir="/Applications" iina > /dev/null' 'IINA' on \

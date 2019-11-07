@@ -31,6 +31,10 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$HOME/.pyenv/bin:/usr/local/opt/python/libexec/bin:$PATH"
 export VIRTUALENVWRAPPER_PYTHON=/usr/local/opt/python/libexec/bin/python
 export WORKON_HOME=$HOME/.venvs
+
+if [ -f "/usr/local/bin/virtualenvwrapper.sh" ]; then source /usr/local/bin/virtualenvwrapper.sh ; fi
+if [ -f "$PYENV_ROOT/versions/$(pyenv global)/bin/virtualenvwrapper.sh" ]; then source "$PYENV_ROOT/versions/$(pyenv global)/bin/virtualenvwrapper.sh" ; fi
+
 source /usr/local/bin/virtualenvwrapper.sh
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"

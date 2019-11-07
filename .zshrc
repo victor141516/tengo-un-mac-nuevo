@@ -28,12 +28,9 @@ export PATH=$PATH:$GOPATH/bin
 
 # Python
 export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$HOME/.pyenv/bin:/usr/local/opt/python/libexec/bin:$PATH"
-export VIRTUALENVWRAPPER_PYTHON=/usr/local/opt/python/libexec/bin/python
+export PATH="$HOME/.pyenv/bin:$PATH"
+export VIRTUALENVWRAPPER_PYTHON=python
 export WORKON_HOME=$HOME/.venvs
-
-if [ -f "/usr/local/bin/virtualenvwrapper.sh" ]; then source /usr/local/bin/virtualenvwrapper.sh ; fi
-if [ -f "$PYENV_ROOT/versions/$(pyenv global)/bin/virtualenvwrapper.sh" ]; then source "$PYENV_ROOT/versions/$(pyenv global)/bin/virtualenvwrapper.sh" ; fi
 
 source /usr/local/bin/virtualenvwrapper.sh
 eval "$(pyenv init -)"
@@ -42,6 +39,9 @@ export PYTHONDONTWRITEBYTECODE=1
 alias venv3='workon . || mkvirtualenv -p $(which python3.7) ${PWD##*/}'
 alias venv2='workon . || mkvirtualenv -p $(which python2.7) ${PWD##*/}'
 alias venv=venv3
+
+if [ -f "/usr/local/bin/virtualenvwrapper.sh" ]; then source /usr/local/bin/virtualenvwrapper.sh ; fi
+if [ -f "$PYENV_ROOT/versions/$(pyenv global)/bin/virtualenvwrapper.sh" ]; then source "$PYENV_ROOT/versions/$(pyenv global)/bin/virtualenvwrapper.sh" ; fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [ -f ~/.z.sh ] && source ~/.z.sh

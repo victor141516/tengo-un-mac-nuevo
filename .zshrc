@@ -32,7 +32,6 @@ export PATH="$HOME/.pyenv/bin:$PATH"
 export VIRTUALENVWRAPPER_PYTHON=python
 export WORKON_HOME=$HOME/.venvs
 
-source /usr/local/bin/virtualenvwrapper.sh
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 export PYTHONDONTWRITEBYTECODE=1

@@ -1,4 +1,5 @@
-source /usr/local/share/antigen/antigen.zsh
+if [ -f "/usr/local/share/antigen/antigen.zsh" ]; then source /usr/local/share/antigen/antigen.zsh ; fi
+if [ -f "$HOME/.antigen.zsh" ]; then source $HOME/.antigen.zsh  ; fi
 
 # Antigen
 antigen use oh-my-zsh

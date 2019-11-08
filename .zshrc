@@ -72,6 +72,7 @@ alias clear_docker_logs="docker run -it --privileged \
 alias docker-update-container='docker run --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
     containrrr/watchtower --run-once'
+command -v open || alias open='gio open'
 
 function sshlcode {
     DIR=.$(echo $1 | sed 's/[@.:\/]/_/g') && \

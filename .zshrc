@@ -56,6 +56,7 @@ alias ggg='ggpush --force'
 alias gp=ggpull
 alias gcdtn='git commit --amend --no-edit --date "$(date)"'
 alias glog='git log --oneline --decorate --graph --all --full-history'
+alias gk=gitkraken
 alias ls='lsd'
 alias fork='open -a Fork .'
 alias path='echo $PATH | tr -s ":" "\n"'

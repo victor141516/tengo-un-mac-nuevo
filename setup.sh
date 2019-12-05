@@ -44,7 +44,7 @@ echo "Installing Fork..." && brew cask install --appdir="/Applications" fork > /
 echo "Installing fz..." && curl "https://raw.githubusercontent.com/changyuheng/fz/master/fz.sh" > ~/.fz.sh
 echo "Installing fzf..." && brew install fzf > /dev/null
 echo "Installing gci..." && npm install -g 'victor141516/git-checkout-interactive#patch-1' > /dev/null
-echo "Installing git-open" && npm install --global git-open > /dev/null
+echo "Installing git-open" && npm install --global https://github.com/victor141516/git-o > /dev/null
 echo "Installing git..." && brew install git > /dev/null
 echo "Installing gnu-sed..." && brew install gnu-sed --with-default-names > /dev/null
 echo "Installing go..." && brew install go > /dev/null

@@ -94,3 +94,5 @@ if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/
 if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
 
 source ~/.zshrc.secrets
+export TERM=xterm-256color
+command -v code > /dev/null && export EDITOR='code -w'

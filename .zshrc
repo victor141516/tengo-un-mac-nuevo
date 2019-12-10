@@ -46,6 +46,7 @@ if [ -f "$PYENV_ROOT/versions/$(pyenv global)/bin/virtualenvwrapper.sh" ]; then 
 [ -f ~/.z.sh ] && source ~/.z.sh
 [ -f ~/.fz.sh ] && source ~/.fz.sh
 PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
+export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
 
 export EDITOR=nano
 alias p=popd

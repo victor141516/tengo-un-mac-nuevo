@@ -77,10 +77,11 @@ command -v open || alias open='gio open'
 
 function sshlcode {
     DIR=.$(echo $1 | sed 's/[@.:\/]/_/g') && \
+    mkdir -p $DIR && \
     sshfs $1 $DIR && \
     code --new-window --wait $DIR ; \
     echo "Unmounting..." && \
-    until umount $DIR 2> /dev/null; do sleep 0.1; done && \
+    until sudo umount $DIR 2> /dev/null; do sleep 0.1; done && \
     rmdir $DIR
 }
 

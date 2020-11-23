@@ -22,9 +22,10 @@ antigen bundle sindresorhus/pure
 antigen apply
 
 # Go
+export GOROOT=/usr/local/go
 export GOPATH="$HOME/go"
 export PATH="/opt/things:$PATH"
-export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
 
 # Python
 export PYENV_ROOT="$HOME/.pyenv"
@@ -40,13 +41,13 @@ alias venv2='workon . || mkvirtualenv -p $(which python2.7) ${PWD##*/}'
 alias venv=venv3
 
 if [ -f "/usr/local/bin/virtualenvwrapper.sh" ]; then source /usr/local/bin/virtualenvwrapper.sh ; fi
+if [ -f "$HOME/.local/bin/virtualenvwrapper.sh" ]; then source $HOME/.local/bin/virtualenvwrapper.sh ; fi
 if [ -f "$PYENV_ROOT/versions/$(pyenv global)/bin/virtualenvwrapper.sh" ]; then source "$PYENV_ROOT/versions/$(pyenv global)/bin/virtualenvwrapper.sh" ; fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [ -f ~/.z.sh ] && source ~/.z.sh
 [ -f ~/.fz.sh ] && source ~/.fz.sh
-PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
-export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
+export PATH="$HOME/.local/bin:/usr/local/opt/grep/libexec/gnubin:$PATH"
 
 export EDITOR=nano
 alias p=popd
@@ -57,6 +58,7 @@ alias ggg='ggpush --force'
 alias gp=ggpull
 alias gcdtn='git commit --amend --no-edit --date "$(date)"'
 alias glog='git log --oneline --decorate --graph --all --full-history'
+alias gmnff="git merge --no-ff"
 alias gk=gitkraken
 alias ls='lsd'
 alias fork='open -a Fork .'
@@ -97,3 +99,23 @@ if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-clou
 source ~/.zshrc.secrets
 export TERM=xterm-256color
 command -v code > /dev/null && export EDITOR='code -w'
+
+code () {
+    docker run -d --rm \
+        --name code-server \
+        --network caddywork \
+        -e 'SERVICE_URL=https://marketplace.visualstudio.com/_apis/public/gallery' \
+        -e 'ITEM_URL=https://marketplace.visualstudio.com/items' \
+        -v "$HOME:/home/coder/project" \
+        -v "$HOME/remote/code-server-config/config:/home/coder/.config" \
+        -v "$HOME/remote/code-server-config/local:/home/coder/.local/share/code-server" \
+        -u "$(id -u):$(id -g)" \
+        --entrypoint '' \
+        codercom/code-server:latest /home/coder/.config/entrypoint.sh > /dev/null 2> /dev/null
+
+    REMOTEPATH=$(echo "$(readlink -f $1)" | sed "s/$(echo $HOME | sed 's/\//\\\//g')/\/home\/coder\/project/")
+
+    echo '"%programfiles(x86)%\\Google\\Chrome\\Application\\chrome.exe" --ignore-certificate-errors --app=https://codes.viti.site/?folder='$REMOTEPATH
+}
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/bitcomplete bit

@@ -22,7 +22,7 @@ antigen bundle sindresorhus/pure
 antigen apply
 
 # Go
-if command -v go &>/dev/null; then
+if test -f /usr/local/go/bin/go &> /dev/null; then
     export GOROOT=/usr/local/go
     export GOPATH="$HOME/go"
     export PATH="/opt/things:$PATH"
@@ -37,11 +37,13 @@ if command -v pyenv &>/dev/null; then
     eval "$(pyenv virtualenv-init -)"
     export PYTHONDONTWRITEBYTECODE=1
     if [ -f "$PYENV_ROOT/versions/$(pyenv global)/bin/virtualenvwrapper.sh" ]; then source "$PYENV_ROOT/versions/$(pyenv global)/bin/virtualenvwrapper.sh"; fi
+    export PYTHONBREAKPOINT=ipdb.set_trace
+    export IPDB_CONTEXT_SIZE=11
 fi
 export VIRTUALENVWRAPPER_PYTHON=python
 export WORKON_HOME=$HOME/.venvs
-alias venv3='workon . || mkvirtualenv -p $(which python3.7) ${PWD##*/}'
-alias venv2='workon . || mkvirtualenv -p $(which python2.7) ${PWD##*/}'
+alias venv3='workon . || mkvirtualenv -p $(which python3) ${PWD##*/}'
+alias venv2='workon . || mkvirtualenv -p $(which python2) ${PWD##*/}'
 alias venv=venv3
 if [ -f "/usr/local/bin/virtualenvwrapper.sh" ]; then source /usr/local/bin/virtualenvwrapper.sh; fi
 if [ -f "$HOME/.local/bin/virtualenvwrapper.sh" ]; then source $HOME/.local/bin/virtualenvwrapper.sh; fi
@@ -52,6 +54,7 @@ if [ -f "$HOME/.local/bin/virtualenvwrapper.sh" ]; then source $HOME/.local/bin/
 
 export PATH="$HOME/.local/bin:/usr/local/opt/grep/libexec/gnubin:$PATH"
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+export PATH="$PATH:/usr/lib/dart/bin"
 
 export EDITOR=nano
 alias p=popd
@@ -60,9 +63,11 @@ alias gro=git-o
 alias gg=ggpush
 alias ggg='ggpush --force'
 alias gp=ggpull
-alias gcdtn='git commit --amend --no-edit --date "$(date)"'
+alias gcdtn='git commit --amend --no-edit --no-verify --date "$(date)"'
 alias glog='git log --oneline --decorate --graph --all --full-history'
 alias gmnff="git merge --no-ff"
+alias gwip='git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
+alias gawip="git add -A; git rm $(git ls-files --deleted) 2> /dev/null; gwip"
 alias gk=gitkraken
 alias ls='lsd'
 alias path='echo $PATH | tr -s ":" "\n"'
@@ -80,6 +85,13 @@ alias docker-update-container='docker run --rm \
     containrrr/watchtower --run-once'
 command -v open || alias open='gio open'
 
+alias k=kubectl
+source <(kubectl completion zsh)
+compdef k="kubectl"
+source <(minikube completion zsh)
+
+export SC_SRC=/home/victor141516/Code/Work/shuttlecloud
+
 case "$(uname -s)" in
 Darwin)
     # OSX
@@ -88,13 +100,19 @@ Darwin)
 Linux)
     if grep -qi Microsoft /proc/version; then
         # WSL
-        function fork() {
-            /mnt/c/Users/victor141516/AppData/Local/Fork/Fork.exe $(wslpath -w $1)
-        }
+        alias fork='/mnt/c/Windows/System32/cmd.exe /c "%USERPROFILE%\\AppData\Local\Fork\Fork.exe "$(wslpath -w -a .) 2> /dev/null'
+        # /mnt/c/Users/victor141516/AppData/Local/Fork/Fork.exe $(wslpath -w $1)
 
         export WINDOWS_IP="$(ipconfig.exe | grep -A6 WSL | grep 'IPv4 Address' | awk '{print $NF}' | tr -d '\r')"
         export DISPLAY="$WINDOWS_IP:0.0"
         alias open="powershell.exe Start-Process"
+	alias ding="/mnt/c/Program\ Files/VideoLAN/VLC/vlc.exe --intf dummy http://www.sonidosmp3gratis.com/sounds/010762485_prev.mp3 vlc://quit"
+
+	# Start or enter a PID namespace in WSL2
+	# source /usr/sbin/start-systemd-namespace
+
+	# Fix Wireguard stuff
+	alias fix-ssh='sudo ip link set dev eth0 mtu 1400'
     else
         # Linux
     fi
@@ -117,6 +135,9 @@ function take() {
     mkdir $1
     cd $1
 }
+
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
 
 # gcloud
 if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
@@ -143,5 +164,7 @@ command -v code >/dev/null && export EDITOR='code -w'
 #
 #    echo '"%programfiles(x86)%\\Google\\Chrome\\Application\\chrome.exe" --ignore-certificate-errors --app=https://codes.viti.site/?folder='$REMOTEPATH
 #}
+
+function \$() {$@}
+
 autoload -U +X bashcompinit && bashcompinit
-cd

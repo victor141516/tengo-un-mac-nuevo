@@ -48,6 +48,8 @@ alias venv=venv3
 if [ -f "/usr/local/bin/virtualenvwrapper.sh" ]; then source /usr/local/bin/virtualenvwrapper.sh; fi
 if [ -f "$HOME/.local/bin/virtualenvwrapper.sh" ]; then source $HOME/.local/bin/virtualenvwrapper.sh; fi
 
+[ $PREFIX ] && export N_PREFIX=$PREFIX  # For n to work in termux
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [ -f ~/.z.sh ] && source ~/.z.sh
 [ -f ~/.fz.sh ] && source ~/.fz.sh

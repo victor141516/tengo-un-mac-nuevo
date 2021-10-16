@@ -100,7 +100,7 @@ Darwin)
     alias fork='open -a Fork .'
     ;;
 Linux)
-    if grep -qi Microsoft /proc/version; then
+    if test -r /proc/version && grep -qi Microsoft /proc/version; then
         # WSL
         alias fork='/mnt/c/Windows/System32/cmd.exe /c "%USERPROFILE%\\AppData\Local\Fork\Fork.exe "$(wslpath -w -a .) 2> /dev/null'
         # /mnt/c/Users/victor141516/AppData/Local/Fork/Fork.exe $(wslpath -w $1)

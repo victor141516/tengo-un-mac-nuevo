@@ -1,25 +1,26 @@
-if [ -f "/usr/local/share/antigen/antigen.zsh" ]; then source /usr/local/share/antigen/antigen.zsh; fi
-if [ -f "$HOME/.antigen.zsh" ]; then source $HOME/.antigen.zsh; fi
+autoload -U +X bashcompinit && bashcompinit
 
-# Antigen
-antigen use oh-my-zsh
-antigen bundle autopep8
-antigen bundle command-not-found
-antigen bundle docker-compose
-antigen bundle docker
-antigen bundle extract
-antigen bundle git
-antigen bundle npm
-antigen bundle pip
-antigen bundle pep8
-antigen bundle python
-antigen bundle paulirish/git-open
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle zsh-users/zsh-completions
-antigen bundle mafredri/zsh-async
-antigen bundle sindresorhus/pure@main
-antigen apply
+# Homebrew
+export HOMEBREW_PREFIX="/opt/homebrew";
+export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
+export HOMEBREW_REPOSITORY="/opt/homebrew";
+export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
+export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
+test -d /home/linuxbrew/.linuxbrew/bin && export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+test -d $HOME/.linuxbrew/bin && export PATH="${PATH+$PATH:}$HOME/.linuxbrew/bin"
+test -d /opt/homebrew/bin && export PATH="${PATH+$PATH:}/opt/homebrew/bin"
+test -d /opt/homebrew/sbin && export PATH="${PATH+$PATH:}/opt/homebrew/sbin"
+
+# Starship
+eval "$(starship init zsh)"
+
+# ZSH plugins
+if test -d $HOME/.oh-my-zsh; then
+    export ZSH="$HOME/.oh-my-zsh"
+    plugins=(git docker-compose docker zsh-syntax-highlighting zsh-autosuggestions h)  # https://github.com/paoloantinori/hhighlighter
+    fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+    source $ZSH/oh-my-zsh.sh
+fi
 
 # Go
 if test -f /usr/local/go/bin/go &> /dev/null; then
@@ -36,10 +37,13 @@ if command -v pyenv &>/dev/null; then
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
     export PYTHONDONTWRITEBYTECODE=1
-    if [ -f "$PYENV_ROOT/versions/$(pyenv global)/bin/virtualenvwrapper.sh" ]; then source "$PYENV_ROOT/versions/$(pyenv global)/bin/virtualenvwrapper.sh"; fi
+    if [ -f "$PYENV_ROOT/versions/$(pyenv global)/bin/virtualenvwrapper.sh" ]; then
+        source "$PYENV_ROOT/versions/$(pyenv global)/bin/virtualenvwrapper.sh";
+    fi
     export PYTHONBREAKPOINT=ipdb.set_trace
     export IPDB_CONTEXT_SIZE=11
 fi
+command -v virtualenvwrapper.sh &>/dev/null && source virtualenvwrapper.sh;
 export VIRTUALENVWRAPPER_PYTHON=python
 export WORKON_HOME=$HOME/.venvs
 alias venv3='workon . || mkvirtualenv -p $(which python3) ${PWD##*/}'
@@ -47,16 +51,36 @@ alias venv2='workon . || mkvirtualenv -p $(which python2) ${PWD##*/}'
 alias venv=venv3
 if [ -f "/usr/local/bin/virtualenvwrapper.sh" ]; then source /usr/local/bin/virtualenvwrapper.sh; fi
 if [ -f "$HOME/.local/bin/virtualenvwrapper.sh" ]; then source $HOME/.local/bin/virtualenvwrapper.sh; fi
+test -d /opt/homebrew/opt/python/libexec/bin && export PATH="$PATH:/opt/homebrew/opt/python/libexec/bin"
 
 [ $PREFIX ] && export N_PREFIX=$PREFIX  # For n to work in termux
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-[ -f ~/.z.sh ] && source ~/.z.sh
-[ -f ~/.fz.sh ] && source ~/.fz.sh
+# [ -f ~/.fz.sh ] && source ~/.fz.sh
+# [ -f ~/.z.sh ] && source ~/.z.sh
+eval "$(zoxide init zsh)"
+
+if command -v atuin &>/dev/null; then
+    ATUIN_NOBIND=1 eval "$(atuin init zsh)"
+    bindkey '^r' _atuin_search_widget
+fi
+
 
 export PATH="$HOME/.local/bin:/usr/local/opt/grep/libexec/gnubin:$PATH"
-export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-export PATH="$PATH:/usr/lib/dart/bin"
+test -d /usr/lib/dart/bin && export PATH="$PATH:/usr/lib/dart/bin"
+test -d /.deno/bin && export PATH="$PATH:$HOME/.deno/bin"
+
+# Bun
+if [ -d "$HOME/.bun" ]; then
+    export BUN_INSTALL="$HOME/.bun"
+    export PATH="$BUN_INSTALL/bin:$PATH"
+fi
+
+# Java
+if [ -d "/opt/homebrew/opt/openjdk" ]; then
+    export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+fi
+
 
 export EDITOR=nano
 alias p=popd
@@ -66,38 +90,41 @@ alias gg=ggpush
 alias ggg='ggpush --force'
 alias gp=ggpull
 alias gcdtn='git commit --amend --no-edit --no-verify --date "$(date)"'
+alias gudtn=gcdtn
 alias glog='git log --oneline --decorate --graph --all --full-history'
 alias gmnff="git merge --no-ff"
 alias gwip='git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
-alias gawip="git add -A; git rm $(git ls-files --deleted) 2> /dev/null; gwip"
-alias gk=gitkraken
+alias gawip="git add -A; git rm \$(git ls-files --deleted) 2> /dev/null; gwip"
+alias gcedit='git commit --amend --no-verify'
 alias ls='lsd'
 alias path='echo $PATH | tr -s ":" "\n"'
 alias uuid="python -c 'from uuid import uuid4; print(str(uuid4()))'"
 alias code.="code ."
-alias co="code -a"
-alias rn=trash
 alias mosh='LC_ALL="en_US.UTF-8" mosh'
-alias clear_docker_logs="docker run -it --privileged \
-    --pid=host debian nsenter -t 1 -m -u -n -i \
-    sh -c 'truncate -s 0 /var/lib/docker/containers/*/*-json.log \
-    && echo ok'"
 alias docker-update-container='docker run --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
     containrrr/watchtower --run-once'
-command -v open || alias open='gio open'
+command -v open &>/dev/null || alias open='gio open'
+
+gci() {
+ git checkout "$(git branch --all | fzf | tr -d '[:space:]')"
+}
 
 alias k=kubectl
-source <(kubectl completion zsh)
+command -v kubectl &>/dev/null && source <(kubectl completion zsh)
 compdef k="kubectl"
-source <(minikube completion zsh)
+command -v minikube &>/dev/null && source <(minikube completion zsh)
 
-export SC_SRC=/home/victor141516/Code/Work/shuttlecloud
+# bye sc
+# export SC_SRC=/home/victor141516/Code/Work/shuttlecloud
 
 case "$(uname -s)" in
 Darwin)
     # OSX
     alias fork='open -a Fork .'
+    # Force x86 on Apple Silicon
+    export DOCKER_DEFAULT_PLATFORM=linux/amd64
+    alias restart-audio-service="sudo pkill -9 coreaudiod"
     ;;
 Linux)
     if test -r /proc/version && grep -qi Microsoft /proc/version; then
@@ -108,13 +135,12 @@ Linux)
         export WINDOWS_IP="$(ipconfig.exe | grep -A6 WSL | grep 'IPv4 Address' | awk '{print $NF}' | tr -d '\r')"
         export DISPLAY="$WINDOWS_IP:0.0"
         alias open="powershell.exe Start-Process"
-	alias ding="/mnt/c/Program\ Files/VideoLAN/VLC/vlc.exe --intf dummy http://www.sonidosmp3gratis.com/sounds/010762485_prev.mp3 vlc://quit"
 
-	# Start or enter a PID namespace in WSL2
-	# source /usr/sbin/start-systemd-namespace
+        # Start or enter a PID namespace in WSL2
+        # source /usr/sbin/start-systemd-namespace
 
-	# Fix Wireguard stuff
-	alias fix-ssh='sudo ip link set dev eth0 mtu 1400'
+        # Fix Wireguard stuff
+        alias fix-ssh='sudo ip link set dev eth0 mtu 1400'
     else
         # Linux
     fi
@@ -138,35 +164,36 @@ function take() {
     cd $1
 }
 
-. $HOME/.asdf/asdf.sh
-. $HOME/.asdf/completions/asdf.bash
+if [ -d "$HOME/.asdf" ]; then
+  . $HOME/.asdf/asdf.sh
+  . $HOME/.asdf/completions/asdf.bash
+fi
+
+function export-dotenv() {
+    export $(cat "${1:-.env}" | grep -v '^#' | xargs)
+}
+alias load-dotenv='export-dotenv'
 
 # gcloud
 if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
 if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
 
-source ~/.zshrc.secrets
+[ -f "~/.zshrc.secrets" ] && source ~/.zshrc.secrets
 export TERM=xterm-256color
 command -v code >/dev/null && export EDITOR='code -w'
 
-#code () {
-#    docker run -d --rm \
-#        --name code-server \
-#        --network caddywork \
-#        -e 'SERVICE_URL=https://marketplace.visualstudio.com/_apis/public/gallery' \
-#        -e 'ITEM_URL=https://marketplace.visualstudio.com/items' \
-#        -v "$HOME:/home/coder/project" \
-#        -v "$HOME/remote/code-server-config/config:/home/coder/.config" \
-#        -v "$HOME/remote/code-server-config/local:/home/coder/.local/share/code-server" \
-#        -u "$(id -u):$(id -g)" \
-#        --entrypoint '' \
-#        codercom/code-server:latest /home/coder/.config/entrypoint.sh > /dev/null 2> /dev/null
-#
-#    REMOTEPATH=$(echo "$(readlink -f $1)" | sed "s/$(echo $HOME | sed 's/\//\\\//g')/\/home\/coder\/project/")
-#
-#    echo '"%programfiles(x86)%\\Google\\Chrome\\Application\\chrome.exe" --ignore-certificate-errors --app=https://codes.viti.site/?folder='$REMOTEPATH
-#}
+function deploy_web_to_viti.site() {
+  [ $1 ] || return
+  npm run build &&
+    zip -r dist.zip dist &&
+    scp dist.zip victor141516@viti.site:dist.zip &&
+    rm dist.zip &&
+    ssh victor141516@viti.site "zsh -i -c 'rm -rf services/webs/$1/* ; unzip dist.zip -d services/webs/$1 && \
+      rm dist.zip && \
+      mv services/webs/$1/dist/* services/webs/$1 && \
+      rmdir services/webs/$1/dist'"
+}
 
-function \$() {$@}
-
-autoload -U +X bashcompinit && bashcompinit
+# function \$() {$@}
+# bun completions
+[ -s "/Users/victor141516/.bun/_bun" ] && source "/Users/victor141516/.bun/_bun"

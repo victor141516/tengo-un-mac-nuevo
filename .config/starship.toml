@@ -1,0 +1,9 @@
+[character]
+success_symbol = "[❯](bold 162)"
+error_symbol = "[❯](bold 124)"
+
+[directory]
+style = "bold 33"
+
+[gcloud]
+disabled = true

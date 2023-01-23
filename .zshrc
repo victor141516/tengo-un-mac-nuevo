@@ -58,7 +58,6 @@ test -d /opt/homebrew/opt/python/libexec/bin && export PATH="$PATH:/opt/homebrew
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # [ -f ~/.fz.sh ] && source ~/.fz.sh
 # [ -f ~/.z.sh ] && source ~/.z.sh
-eval "$(zoxide init zsh)"
 
 if command -v atuin &>/dev/null; then
     ATUIN_NOBIND=1 eval "$(atuin init zsh)"
@@ -81,6 +80,7 @@ if [ -d "/opt/homebrew/opt/openjdk" ]; then
     export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 fi
 
+eval "$(zoxide init zsh)"
 
 export EDITOR=nano
 alias p=popd
@@ -192,6 +192,25 @@ function deploy_web_to_viti.site() {
       rm dist.zip && \
       mv services/webs/$1/dist/* services/webs/$1 && \
       rmdir services/webs/$1/dist'"
+}
+
+alias fzf="fzf --reverse --preview 'if [ -f {} ]; then
+    bat --color=always {}
+elif [ -d {} ]; then
+    lsd -la --color=always {}
+else
+    echo No preview available for \"{}\"
+fi'"
+
+function z() {
+    if [ $# -eq 0 ]; then
+        ZOXIDE_RESULT=$(zoxide query -l | fzf)
+        if [ ! -z "$ZOXIDE_RESULT" ]; then
+            cd "$ZOXIDE_RESULT"
+        fi
+    else
+        __zoxide_z "$@"  
+    fi
 }
 
 # function \$() {$@}

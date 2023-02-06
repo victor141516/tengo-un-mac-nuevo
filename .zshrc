@@ -45,8 +45,8 @@ if command -v pyenv &>/dev/null; then
     export PYTHONBREAKPOINT=ipdb.set_trace
     export IPDB_CONTEXT_SIZE=11
 fi
-command -v virtualenvwrapper.sh &>/dev/null && source virtualenvwrapper.sh;
 export VIRTUALENVWRAPPER_PYTHON=python
+command -v virtualenvwrapper.sh &>/dev/null && source virtualenvwrapper.sh 2>/dev/null;  # to hide errors in console because of pyenv
 export WORKON_HOME=$HOME/.venvs
 alias venv3='workon . || mkvirtualenv -p $(which python3) ${PWD##*/}'
 alias venv2='workon . || mkvirtualenv -p $(which python2) ${PWD##*/}'

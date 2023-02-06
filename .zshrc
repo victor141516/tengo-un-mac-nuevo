@@ -1,4 +1,13 @@
-autoload -U +X bashcompinit && bashcompinit
+# Old: autoload -U +X bashcompinit && bashcompinit
+# New:
+if type brew &>/dev/null
+then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+
+  autoload -Uz compinit
+  compinit
+fi
+
 
 # Homebrew
 export HOMEBREW_PREFIX="/opt/homebrew";

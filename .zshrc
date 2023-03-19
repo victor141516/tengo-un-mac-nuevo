@@ -170,6 +170,11 @@ if command -v sshfs &>/dev/null; then
     }
 fi
 
+if [ -d "${HOME}/.npm-packages" ]; then
+    NPM_PACKAGES="${HOME}/.npm-packages"
+    export PATH="$PATH:$NPM_PACKAGES/bin"
+fi
+
 function take() {
     mkdir $1
     cd $1

@@ -8,7 +8,6 @@ then
   compinit
 fi
 
-
 # Homebrew
 export HOMEBREW_PREFIX="/opt/homebrew";
 export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
@@ -23,7 +22,14 @@ test -d /opt/homebrew/sbin && export PATH="${PATH+$PATH:}/opt/homebrew/sbin"
 # Starship
 eval "$(starship init zsh)"
 
-# ZSH plugins
+# # Oh my posh (let's use oh my zsh + starship instead)
+# eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/atomic.omp.json)"
+# source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+# source $HOME/.oh-my-zsh/plugins/git/git.plugin.zsh
+# source $HOME/.oh-my-zsh/lib/git.zsh
+
+# ZSH plugins (use either this or oh my posh)
 if test -d $HOME/.oh-my-zsh; then
     export ZSH="$HOME/.oh-my-zsh"
     plugins=(git docker-compose docker zsh-syntax-highlighting zsh-autosuggestions h)  # https://github.com/paoloantinori/hhighlighter
@@ -71,8 +77,7 @@ test -d /opt/homebrew/opt/python/libexec/bin && export PATH="$PATH:/opt/homebrew
 # [ -f ~/.z.sh ] && source ~/.z.sh
 
 if command -v atuin &>/dev/null; then
-    ATUIN_NOBIND=1 eval "$(atuin init zsh)"
-    bindkey '^r' _atuin_search_widget
+    eval "$(atuin init zsh --disable-up-arrow)"
 fi
 
 
@@ -94,6 +99,9 @@ fi
 eval "$(zoxide init zsh)"
 
 export EDITOR=nano
+alias l=ls
+alias la=ls -a
+alias cd="pushd >/dev/null"
 alias p=popd
 alias cat=bat
 alias gro=git-o
@@ -107,6 +115,11 @@ alias gmnff="git merge --no-ff"
 alias gwip='git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
 alias gawip="git add -A; git rm \$(git ls-files --deleted) 2> /dev/null; gwip"
 alias gcedit='git commit --amend --no-verify'
+gcmsg-() { gcmsg $@ --no-verify }
+gg-() { gg $@ --no-verify }
+ggg-() { ggg $@ --no-verify }
+gcn-!() { gcn! $@ --no-verify }
+gcan-!() { gcan! $@ --no-verify }
 alias ls='lsd'
 alias path='echo $PATH | tr -s ":" "\n"'
 alias uuid="python -c 'from uuid import uuid4; print(str(uuid4()))'"
@@ -116,6 +129,7 @@ alias docker-update-container='docker run --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
     containrrr/watchtower --run-once'
 command -v open &>/dev/null || alias open='gio open'
+function c() { awk '{print $'$1'}' }
 
 gci() {
  git checkout "$(git branch --all | fzf | tr -d '[:space:]')"
@@ -194,7 +208,7 @@ alias load-dotenv='export-dotenv'
 if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
 if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
 
-[ -f "~/.zshrc.secrets" ] && source ~/.zshrc.secrets
+[ -f ~/.zshrc.secrets ] && source ~/.zshrc.secrets
 export TERM=xterm-256color
 command -v code >/dev/null && export EDITOR='code -w'
 
@@ -232,3 +246,24 @@ function z() {
 # function \$() {$@}
 # bun completions
 [ -s "/Users/victor141516/.bun/_bun" ] && source "/Users/victor141516/.bun/_bun"
+
+function pay_commitizen_message() {
+    curl -s https://api.openai.com/v1/chat/completions \
+    -H "Authorization: Bearer $OPENAI_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{
+            "model": "gpt-4",
+            "messages": [
+                    {"role": "system", "content": "You will receive Git diffs and you will have to generate a commit message following commitizen rules. Respond only with the commit message. Use the format type: message (without scope)"},
+                    {"role": "user", "content": '"$(gd | jq -Rsa)"'}
+            ]
+    }' | jq -r 'if .choices[0].message.content then .choices[0].message.content else . end'
+}
+
+function forward_container() {
+  docker run -it --rm \
+      -p $OUTSIDE_PORT:$INSIDE_PORT \
+      --network $NETWORK_NAME \
+      alpine/socat \
+      tcp-listen:$INSIDE_PORT,fork,reuseaddr tcp-connect:$CONTAINER_NAME:$INSIDE_PORT
+}

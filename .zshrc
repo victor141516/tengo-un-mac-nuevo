@@ -38,7 +38,7 @@ if test -d $HOME/.oh-my-zsh; then
 fi
 
 # Go
-if test -f /usr/local/go/bin/go &> /dev/null; then
+if command -v go &> /dev/null; then
     export GOROOT=/usr/local/go
     export GOPATH="$HOME/go"
     export PATH="/opt/things:$PATH"

@@ -137,7 +137,7 @@ gci() {
 
 alias k=kubectl
 command -v kubectl &>/dev/null && source <(kubectl completion zsh)
-compdef k="kubectl"
+command -v kubectl &>/dev/null && compdef k="kubectl"
 command -v minikube &>/dev/null && source <(minikube completion zsh)
 
 # bye sc

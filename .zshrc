@@ -15,9 +15,9 @@ export HOMEBREW_REPOSITORY="/opt/homebrew";
 export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
 export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
 test -d /home/linuxbrew/.linuxbrew/bin && export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-test -d $HOME/.linuxbrew/bin && export PATH="${PATH+$PATH:}$HOME/.linuxbrew/bin"
-test -d /opt/homebrew/bin && export PATH="${PATH+$PATH:}/opt/homebrew/bin"
-test -d /opt/homebrew/sbin && export PATH="${PATH+$PATH:}/opt/homebrew/sbin"
+test -d $HOME/.linuxbrew/bin && export PATH="$HOME/.linuxbrew/bin:${PATH+$PATH:}"
+test -d /opt/homebrew/bin && export PATH="/opt/homebrew/bin:${PATH+$PATH:}"
+test -d /opt/homebrew/sbin && export PATH="/opt/homebrew/sbin:${PATH+$PATH:}"
 
 # Starship
 eval "$(starship init zsh)"
@@ -140,9 +140,6 @@ command -v kubectl &>/dev/null && source <(kubectl completion zsh)
 command -v kubectl &>/dev/null && compdef k="kubectl"
 command -v minikube &>/dev/null && source <(minikube completion zsh)
 
-# bye sc
-# export SC_SRC=/home/victor141516/Code/Work/shuttlecloud
-
 case "$(uname -s)" in
 Darwin)
     # OSX
@@ -234,7 +231,7 @@ function z() {
             cd "$ZOXIDE_RESULT"
         fi
     else
-        __zoxide_z "$@"  
+        __zoxide_z "$@"
     fi
 }
 
@@ -263,3 +260,8 @@ function forward_container() {
       tcp-listen:$INSIDE_PORT,fork,reuseaddr tcp-connect:$CONTAINER_NAME:$INSIDE_PORT
 }
 [ -f ~/.inshellisense/key-bindings.zsh ] && source ~/.inshellisense/key-bindings.zsh
+
+export PATH="$PATH:$HOME/Code/Mine/zz-tools/tools"
+export PATH="/usr/local/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
+command -v fnm && eval "$(fnm env)"

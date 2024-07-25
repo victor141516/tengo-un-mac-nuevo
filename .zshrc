@@ -1,3 +1,5 @@
+export LANG="en_US.UTF-8"
+
 # Old: autoload -U +X bashcompinit && bashcompinit
 # New:
 if type brew &>/dev/null
@@ -206,7 +208,7 @@ command -v code >/dev/null && export EDITOR='code -w'
 
 function deploy_web_to_viti.site() {
   [ $1 ] || return
-  npm run build &&
+#   npm run build &&
     zip -r dist.zip dist &&
     scp dist.zip victor141516@viti.site:dist.zip &&
     rm dist.zip &&
@@ -244,7 +246,7 @@ function pay_commitizen_message() {
     -H "Authorization: Bearer $OPENAI_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{
-            "model": "gpt-4",
+            "model": "gpt-4o",
             "messages": [
                     {"role": "system", "content": "You will receive Git diffs and you will have to generate a commit message following commitizen rules. Respond only with the commit message. Use the format type: message (without scope)"},
                     {"role": "user", "content": '"$(gd | jq -Rsa)"'}
@@ -265,3 +267,11 @@ export PATH="$PATH:$HOME/Code/Mine/zz-tools/tools"
 export PATH="/usr/local/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 command -v fnm && eval "$(fnm env)"
+
+# (cd $HOME && \
+#   while true; do git pull ; done ; \ 
+#   sleep 60) >/dev/null 2>&1 &
+
+# (cd $HOME && \
+#   while true ; do git status --short .zshrc | grep '.zshrc' && git add .zshrc && git commit -m 'autocommit' && git push ; sleep 60; done
+# ) >/dev/null 2>&1 &

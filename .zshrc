@@ -273,5 +273,5 @@ command -v fnm && eval "$(fnm env)"
 #   sleep 60) >/dev/null 2>&1 &
 
 (cd $HOME && \
-  while true ; do git status --short .zshrc | grep '.zshrc' && git add .zshrc && git commit -m 'autocommit' && git push ; sleep 6; done
+  while true ; do git status --short .zshrc | grep '.zshrc' && git add .zshrc && git commit -m 'autocommit' && git push ; sleep 60; done
 ) >/dev/null 2>&1 &

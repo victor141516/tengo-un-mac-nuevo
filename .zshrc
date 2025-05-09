@@ -34,6 +34,7 @@ eval "$(starship init zsh)"
 # ZSH plugins (use either this or oh my posh)
 if test -d $HOME/.oh-my-zsh; then
     export ZSH="$HOME/.oh-my-zsh"
+    export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/ohmyzsh"
     plugins=(git docker-compose docker zsh-syntax-highlighting zsh-autosuggestions h)  # https://github.com/paoloantinori/hhighlighter
     fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
     source $ZSH/oh-my-zsh.sh
@@ -41,7 +42,7 @@ fi
 
 # Go
 if command -v go &> /dev/null; then
-    export GOROOT=/usr/local/go
+    # export GOROOT=/usr/local/go
     export GOPATH="$HOME/go"
     export PATH="/opt/things:$PATH"
     export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
@@ -63,7 +64,6 @@ if command -v pyenv &>/dev/null; then
     export IPDB_CONTEXT_SIZE=11
 fi
 export VIRTUALENVWRAPPER_PYTHON=python
-command -v virtualenvwrapper.sh &>/dev/null && source virtualenvwrapper.sh 2>/dev/null;  # to hide errors in console because of pyenv
 export WORKON_HOME=$HOME/.venvs
 alias venv3='workon . || mkvirtualenv -p $(which python3) ${PWD##*/}'
 alias venv2='workon . || mkvirtualenv -p $(which python2) ${PWD##*/}'
@@ -71,6 +71,7 @@ alias venv=venv3
 if [ -f "/usr/local/bin/virtualenvwrapper.sh" ]; then source /usr/local/bin/virtualenvwrapper.sh; fi
 if [ -f "$HOME/.local/bin/virtualenvwrapper.sh" ]; then source $HOME/.local/bin/virtualenvwrapper.sh; fi
 test -d /opt/homebrew/opt/python/libexec/bin && export PATH="$PATH:/opt/homebrew/opt/python/libexec/bin"
+command -v virtualenvwrapper.sh &>/dev/null && source virtualenvwrapper.sh 2>/dev/null;  # to hide errors in console because of pyenv
 
 [ $PREFIX ] && export N_PREFIX=$PREFIX  # For n to work in termux
 
@@ -134,7 +135,7 @@ command -v open &>/dev/null || alias open='gio open'
 function c() { awk '{print $'$1'}' }
 
 gci() {
- git checkout "$(git branch --all | fzf | tr -d '[:space:]')"
+ git checkout "$(git branch --all | fzf | tr -d '[:space:]' | sed 's|remotes/origin/||g')"
 }
 
 alias k=kubectl
@@ -194,7 +195,7 @@ if [ -d "$HOME/.asdf" ]; then
 fi
 
 function export-dotenv() {
-    export $(cat "${1:-.env}" | grep -v '^#' | xargs)
+    export $(cat "${1:-.env}" | grep -v '^#' | grep -v '^$' | xargs)
 }
 alias load-dotenv='export-dotenv'
 
@@ -216,6 +217,25 @@ function deploy_web_to_viti.site() {
       rm dist.zip && \
       mv services/webs/$1/dist/* services/webs/$1 && \
       rmdir services/webs/$1/dist'"
+}
+
+function generate_image() {
+  output_filename="image-$(date +%s).png"
+  image_prompt=$(echo $1 | jq -R)
+
+  gpt_response=$(curl -s https://api.openai.com/v1/images/generations \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $OPENAI_API_KEY" \
+    -d '{
+      "model": "gpt-image-1",
+      "prompt": '$image_prompt',
+      "n": 1,
+      "size": "1024x1024"
+    }')
+  echo $gpt_response | jq -r '.data[0].b64_json' | base64 -d > $output_filename || echo $gpt_response
+
+  realpath "$output_filename"
+  command -v open >/dev/null && open $output_filename
 }
 
 alias fzf="fzf --reverse --preview 'if [ -f {} ]; then
@@ -268,14 +288,12 @@ export PATH="/usr/local/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 command -v fnm && eval "$(fnm env)"
 
-# (cd $HOME && \
-#   while true; do git pull ; done ; \ 
-#   sleep 60) >/dev/null 2>&1 &
+# pnpm
+export PNPM_HOME="$HOME/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
 
-function aaaaaaa() {
-    (cd $HOME && \
-    while true ; do git status --short .zshrc | grep '.zshrc' && git add .zshrc && git commit -m 'autocommit' && git push ; sleep 60; done
-    ) >/dev/null 2>&1 &
-}
-
-aaaaaaa
+export HOMEBREW_NO_AUTO_UPDATE=true

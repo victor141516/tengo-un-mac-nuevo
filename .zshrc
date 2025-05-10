@@ -222,6 +222,7 @@ function deploy_web_to_viti.site() {
 function generate_image() {
   output_filename="image-$(date +%s).png"
   image_prompt=$(echo $1 | jq -R)
+  resolution="${2:-auto}"
 
   gpt_response=$(curl -s https://api.openai.com/v1/images/generations \
     -H "Content-Type: application/json" \
@@ -230,9 +231,10 @@ function generate_image() {
       "model": "gpt-image-1",
       "prompt": '$image_prompt',
       "n": 1,
-      "size": "1024x1024"
+      "size": "'$resolution'"
     }')
-  echo $gpt_response | jq -r '.data[0].b64_json' | base64 -d > $output_filename || echo $gpt_response
+  
+  echo $gpt_response | jq -r '.data[0].b64_json' | base64 -d > $output_filename || echo "Unexpected response: $gpt_response"
 
   realpath "$output_filename"
   command -v open >/dev/null && open $output_filename

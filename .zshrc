@@ -2,13 +2,13 @@ export LANG="en_US.UTF-8"
 
 # Old: autoload -U +X bashcompinit && bashcompinit
 # New:
-if type brew &>/dev/null
-then
+if type brew &>/dev/null; then
   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-
-  autoload -Uz compinit
-  compinit
 fi
+
+autoload -Uz compinit
+compinit
+zcompile ~/.zcompdump 2>/dev/null
 
 # Homebrew
 export HOMEBREW_PREFIX="/opt/homebrew";
@@ -35,7 +35,7 @@ eval "$(starship init zsh)"
 if test -d $HOME/.oh-my-zsh; then
     export ZSH="$HOME/.oh-my-zsh"
     export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/ohmyzsh"
-    plugins=(git docker-compose docker zsh-syntax-highlighting zsh-autosuggestions h)  # https://github.com/paoloantinori/hhighlighter
+    plugins=(git docker-compose docker zsh-syntax-highlighting zsh-autosuggestions h zsh-lazyload)  # https://github.com/paoloantinori/hhighlighter
     fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
     source $ZSH/oh-my-zsh.sh
 fi
@@ -144,7 +144,7 @@ command -v kubectl &>/dev/null && compdef k="kubectl"
 command -v minikube &>/dev/null && source <(minikube completion zsh)
 
 case "$(uname -s)" in
-Darwin)
+    Darwin)
     # OSX
     alias fork='open -a Fork .'
     # Force x86 on Apple Silicon
@@ -233,7 +233,7 @@ function generate_image() {
       "n": 1,
       "size": "'$resolution'"
     }')
-  
+
   echo $gpt_response | jq -r '.data[0].b64_json' | base64 -d > $output_filename || echo "Unexpected response: $gpt_response"
 
   realpath "$output_filename"
@@ -274,6 +274,16 @@ function pay_commitizen_message() {
                     {"role": "user", "content": '"$(gd | jq -Rsa)"'}
             ]
     }' | jq -r 'if .choices[0].message.content then .choices[0].message.content else . end'
+}
+
+function fileify() {
+  local dir="${1:-.}"
+  find "$dir" -type d -name .git -prune -o -type f -print | while read -r ffile; do
+    relpath="${ffile#$dir/}"
+    echo "=== $relpath ==="
+    /bin/cat "$ffile"
+    echo ""
+  done
 }
 
 function forward_container() {

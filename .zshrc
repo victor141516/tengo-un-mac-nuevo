@@ -35,7 +35,7 @@ eval "$(starship init zsh)"
 if test -d $HOME/.oh-my-zsh; then
     export ZSH="$HOME/.oh-my-zsh"
     export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/ohmyzsh"
-    plugins=(git docker-compose docker zsh-syntax-highlighting zsh-autosuggestions h zsh-lazyload)  # https://github.com/paoloantinori/hhighlighter
+    plugins=(git docker-compose docker zsh-syntax-highlighting zsh-autosuggestions h)  # https://github.com/paoloantinori/hhighlighter
     fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
     source $ZSH/oh-my-zsh.sh
 fi
@@ -295,7 +295,6 @@ function forward_container() {
 }
 [ -f ~/.inshellisense/key-bindings.zsh ] && source ~/.inshellisense/key-bindings.zsh
 
-export PATH="$PATH:$HOME/Code/Mine/zz-tools/tools"
 export PATH="/usr/local/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 command -v fnm && eval "$(fnm env)"

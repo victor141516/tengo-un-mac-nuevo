@@ -154,7 +154,7 @@ case "$(uname -s)" in
 Linux)
     if test -r /proc/version && grep -qi Microsoft /proc/version; then
         # WSL
-        alias fork='/mnt/c/Windows/System32/cmd.exe /c "%USERPROFILE%\\AppData\Local\Fork\Fork.exe "$(wslpath -w -a .) 2> /dev/null'
+        alias fork='/mnt/c/Windows/System32/cmd.exe /c "%USERPROFILE%\\AppData\Local\Fork\current\Fork.exe "$(wslpath -w -a .) 2> /dev/null'
         # /mnt/c/Users/victor141516/AppData/Local/Fork/Fork.exe $(wslpath -w $1)
 
         export WINDOWS_IP="$(ipconfig.exe | grep -A6 WSL | grep 'IPv4 Address' | awk '{print $NF}' | tr -d '\r')"
